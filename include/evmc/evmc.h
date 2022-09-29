@@ -764,6 +764,17 @@ typedef enum evmc_access_status (*evmc_access_storage_fn)(struct evmc_host_conte
                                                           const evmc_bytes32* key);
 
 /**
+ * Check nonce for EIP-2681.
+ *
+ * @param context  The Host execution context.
+ * @param address  The address of the account.
+ * @return         Returns true if the nonce does not exceed the limit,
+ *                 otherwise returns false.
+ */
+typedef bool (*evmc_check_nonce_fn)(struct evmc_host_context* context,
+                                    const evmc_address* address);
+
+/**
  * Pointer to the callback function supporting EVM calls.
  *
  * @param context  The pointer to the Host execution context.
@@ -824,6 +835,9 @@ struct evmc_host_interface
 
     /** Access storage callback function. */
     evmc_access_storage_fn access_storage;
+
+    /** Check nonce callback function. */
+    evmc_check_nonce_fn check_nonce;
 };
 
 

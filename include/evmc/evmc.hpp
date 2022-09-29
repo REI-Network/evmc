@@ -487,6 +487,9 @@ public:
 
     /// @copydoc evmc_host_interface::access_storage
     virtual evmc_access_status access_storage(const address& addr, const bytes32& key) noexcept = 0;
+
+    /// @copydoc evmc_host_interface::check_nonce
+    virtual bool check_nonce(const address& addr) noexcept = 0;
 };
 
 
@@ -584,6 +587,11 @@ public:
     evmc_access_status access_storage(const address& address, const bytes32& key) noexcept final
     {
         return host->access_storage(context, &address, &key);
+    }
+
+    bool check_nonce(const address& address) noexcept final
+    {
+        return host->check_nonce(context, &address);
     }
 };
 
@@ -838,6 +846,11 @@ inline evmc_access_status access_storage(evmc_host_context* h,
 {
     return Host::from_context(h)->access_storage(*addr, *key);
 }
+
+inline bool check_nonce(evmc_host_context* h, const evmc_address* addr) noexcept
+{
+    return Host::from_context(h)->check_nonce(*addr);
+}
 }  // namespace internal
 
 inline const evmc_host_interface& Host::get_interface() noexcept
@@ -850,6 +863,7 @@ inline const evmc_host_interface& Host::get_interface() noexcept
         ::evmc::internal::call,           ::evmc::internal::get_tx_context,
         ::evmc::internal::get_block_hash, ::evmc::internal::emit_log,
         ::evmc::internal::access_account, ::evmc::internal::access_storage,
+        ::evmc::internal::check_nonce
     };
     return interface;
 }

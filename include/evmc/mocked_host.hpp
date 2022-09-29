@@ -476,5 +476,11 @@ public:
         value.access_status = EVMC_ACCESS_WARM;
         return access_status;
     }
+
+    /// Check nonce for EIP-2681
+    bool check_nonce(const address& addr) noexcept override
+    {
+        return true;
+    }
 };
 }  // namespace evmc
